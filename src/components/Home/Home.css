@@ -45,13 +45,15 @@
 
 /* --- Main Content Area --- */
 .main-content {
+  display: flex;
+  flex-direction: row;
   flex: 1;
   height: 85vh;
   width: 100%;
   align-items: flex-start;
-  display: flex;
-  justify-content: center;
-  padding: 15px;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 15px 25px;
   box-sizing: border-box;
 }
 
@@ -61,4 +63,19 @@
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1;
+}
+
+.sidebar {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+  padding: 25px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }

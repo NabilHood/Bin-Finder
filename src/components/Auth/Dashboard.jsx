@@ -12,7 +12,15 @@ const Dashboard = ({ user }) => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
+      <div className="auth-card" style={{ position: 'relative' }}>
+        <button 
+          onClick={() => navigate('/')} 
+          className="close-button"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+        
         <div className="auth-header">
           <h1>Welcome to BinFinder!</h1>
           <p>Hello, {user.fullName}!</p>

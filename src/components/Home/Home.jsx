@@ -53,6 +53,10 @@ function Home() {
             </Popup>
           </Marker>
         </MapContainer>
+
+        <div className="sidebar">
+          <p>Filtering & Report goes here</p>
+        </div>
       </div>
     </div>
   );
