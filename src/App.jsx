@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import SignUp from './components/Auth/SignUp';
 import Login from './components/Auth/Login';
 import Dashboard from './components/Auth/Dashboard';
+import Home from './components/Home/Home';
 import './App.css';
 
 function App() {
@@ -14,6 +15,10 @@ function App() {
       <div className="App">
         <Routes>
           <Route 
+            path="/" 
+            element={<Home />} 
+          />
+          <Route 
             path="/signup" 
             element={<SignUp setUser={setUser} />} 
           />
@@ -23,11 +28,7 @@ function App() {
           />
           <Route 
             path="/dashboard" 
-            element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/" 
-            element={<Navigate to="/login" />} 
+            element={user ? <Dashboard user={user} /> : <Navigate to="/" />} 
           />
         </Routes>
       </div>

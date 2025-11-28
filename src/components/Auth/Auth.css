@@ -218,3 +218,23 @@
     font-size: 1.5rem;
   }
 }
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 32px;
+  font-weight: bold;
+  color: #360303;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.2s;
+  font-family: Arial, sans-serif;
+}
+
+.close-button:hover {
+  color: #b22020;
+}
