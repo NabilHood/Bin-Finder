@@ -4,22 +4,24 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './Home.css';
 
-// Set marker icon in React-Leaflet
-import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+// Create bin icon for pin
+const createBinIcon = () => {
+  const color = '#2E8B57';
 
-let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-});
-L.Marker.prototype.options.icon = DefaultIcon;
+  return L.divIcon({
+    className: 'custom-fa-icon',
+    html: `<div style="background-color: ${color};" class="marker-circle">
+             <i class="fa-solid fa-trash-can"></i>
+           </div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -15]
+  });
+}
 
 function Home() {
-  // Coordinates for the Cyberjaya
-  const position = [2.9278, 101.6419];
+  const position = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
+  const binIcon = createBinIcon();      // Bin icon for pin
 
   return (
     <div className="home-container">
@@ -47,10 +49,8 @@ function Home() {
           />
           
           {/* Placeholder Pin */}
-          <Marker position={position}>
-            <Popup>
-              A sample bin location.
-            </Popup>
+          <Marker position={position} icon={binIcon}>
+            <Popup>Placeholder pin</Popup>
           </Marker>
         </MapContainer>
 
