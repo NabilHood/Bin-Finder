@@ -104,6 +104,7 @@
   transition: transform 0.1s;
 }
 
+/* --- Dropdown list --- */
 .dropdown-btn {
   padding: 8px 12px;
   cursor: pointer;

@@ -5,23 +5,37 @@ import 'leaflet/dist/leaflet.css';
 import './Home.css';
 
 // Create bin icon for pin
-const createBinIcon = () => {
-  const color = '#2E8B57';
+const getIconStyle = (type) => {
+  switch (type) {
+    case 'Recycling Bins':
+      return { color: '#2E8B57', icon: 'fa-trash-can' };
+    case 'Recycling Centres':
+      return { color: '#006400', icon: 'fa-recycle' };
+    case 'Donation Bins':
+      return { color: '#4173AF', icon: 'fa-shirt' };
+    case 'Donation Centres':
+      return { color: '#B22222', icon: 'fa-hand-holding-heart' };
+    default:
+      return { color: '#6A6A6A', icon: 'fa-location-pin' };
+  }
+};
+
+const createCustomIcon = (type) => {
+  const { color, icon } = getIconStyle(type);
 
   return L.divIcon({
     className: 'custom-fa-icon',
     html: `<div style="background-color: ${color};" class="marker-circle">
-             <i class="fa-solid fa-trash-can"></i>
+             <i class="fa-solid ${icon}"></i>
            </div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -15]
   });
-}
+};
 
 function Home() {
   const position = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
-  const binIcon = createBinIcon();      // Bin icon for pin
 
   // For dropdown
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -56,7 +70,10 @@ function Home() {
           />
           
           {/* Placeholder Pin */}
-          <Marker position={position} icon={binIcon}>
+          <Marker
+            position={position}
+            icon={createCustomIcon("Recycling Bins")}
+          >
             <Popup>Placeholder pin</Popup>
           </Marker>
         </MapContainer>
