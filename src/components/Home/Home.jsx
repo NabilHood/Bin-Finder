@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -22,6 +22,13 @@ const createBinIcon = () => {
 function Home() {
   const position = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
   const binIcon = createBinIcon();      // Bin icon for pin
+
+  // For dropdown
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const categories = ['Recycling Bins', 'Recycling Centres', 'Donation Bins', 'Donation Centres'];
+  const handleCheckboxChange = (category) => {
+    setSelectedCategories(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
+  }
 
   return (
     <div className="home-container">
@@ -56,6 +63,25 @@ function Home() {
 
         <div className="sidebar">
           <p>Filtering & Report goes here</p>
+            
+            {/* Category Filtering */}
+            <div className="dropdown-list">
+              <p><b>Category</b></p>
+
+              {categories.map(category => (
+                <label key={category} className="dropdown-item">
+                  <input
+                    type="checkbox"
+                    value={category}
+                    checked={selectedCategories.includes(category)}
+                    onChange={() => handleCheckboxChange(category)}
+                  />
+                  {category}
+                </label>
+              ))}
+
+              <button className="filter-btn">Filter</button>
+            </div>
         </div>
       </div>
     </div>
