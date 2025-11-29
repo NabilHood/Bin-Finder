@@ -103,3 +103,46 @@
   transform: scale(1.1);
   transition: transform 0.1s;
 }
+
+.dropdown-btn {
+  padding: 8px 12px;
+  cursor: pointer;
+  background-color: #2E8B57;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.dropdown-list {
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  text-align: left;
+}
+
+.dropdown-item {
+  display: flex;         /* checkbox and text in a row */
+  align-items: center;   /* vertically center them */
+  gap: 16px;             /* space between checkbox and text */
+  margin: 10px;    /* space between items */
+}
+
+.filter-btn {
+  background: #2E8B57;
+  color: #fafafa;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.filter-btn:hover {
+  background: #26734d;
+}
