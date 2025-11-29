@@ -5,6 +5,7 @@ import SignUp from './components/Auth/SignUp';
 import Login from './components/Auth/Login';
 import Dashboard from './components/Auth/Dashboard';
 import Home from './components/Home/Home';
+import FarmingSimulator from './components/Game/FarmingSimulator'; // Import the new game component
 import './App.css';
 
 function App() {
@@ -29,6 +30,11 @@ function App() {
           <Route 
             path="/dashboard" 
             element={user ? <Dashboard user={user} /> : <Navigate to="/" />} 
+          />
+          <Route
+            path="/farm"
+            // Optionally protect this route so only logged-in users can access it
+            element={user ? <FarmingSimulator /> : <Navigate to="/login" />}
           />
         </Routes>
       </div>
