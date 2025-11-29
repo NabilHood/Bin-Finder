@@ -4,23 +4,26 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './Home.css';
 
+// Temporary data
+import { mapLocations } from './tempdata.js';
+
 // Create bin icon for pin
 const getIconStyle = (type) => {
   switch (type) {
-    case 'Recycling Bins':
+    case 'Recycling Bin':
       return { color: '#2E8B57', icon: 'fa-trash-can' };
-    case 'Recycling Centres':
+    case 'Recycling Centre':
       return { color: '#006400', icon: 'fa-recycle' };
-    case 'Donation Bins':
+    case 'Donation Bin':
       return { color: '#4173AF', icon: 'fa-shirt' };
-    case 'Donation Centres':
+    case 'Donation Centre':
       return { color: '#B22222', icon: 'fa-hand-holding-heart' };
     default:
       return { color: '#6A6A6A', icon: 'fa-location-pin' };
   }
 };
 
-const createCustomIcon = (type) => {
+const createPin = (type) => {
   const { color, icon } = getIconStyle(type);
 
   return L.divIcon({
@@ -69,13 +72,23 @@ function Home() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
-          {/* Placeholder Pin */}
-          <Marker
-            position={position}
-            icon={createCustomIcon("Recycling Bins")}
-          >
-            <Popup>Placeholder pin</Popup>
-          </Marker>
+          {/* Loop through all pin */}
+          {mapLocations.map((location) => (
+            <Marker 
+              key={location.id}
+              position={[location.lat, location.lng]}
+              icon={createPin(location.type)} 
+            >
+              <Popup>
+                <div style={{ textAlign: 'center' }}>
+                  <h3>{location.name}</h3>
+                  <p style={{ margin: 0, color: 'gray' }}>{location.type}</p>
+                  <hr style={{ margin: '5px 0' }}/>
+                  <small>{location.address}</small>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
         </MapContainer>
 
         <div className="sidebar">
