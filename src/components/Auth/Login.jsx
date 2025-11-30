@@ -40,7 +40,7 @@ const Login = ({ setUser }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/vr/user/profile`, {
+      const response = await fetch(`${BASE_URL}/v1/user/profile`, {
         method: 'GET',
         credentials: 'include'
       });
@@ -69,7 +69,7 @@ const Login = ({ setUser }) => {
         };
 
         // First, login
-        const loginResponse = await fetch(`${BASE_URL}/vr/user/login`, {
+        const loginResponse = await fetch(`${BASE_URL}/v1/user/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const Login = ({ setUser }) => {
         // Transform API data to match your app's user structure
         const userData = {
           id: profileData.user?.username || formData.email,
-          fullName: `${profileData.user?.firstnam || ''} ${profileData.user?.lastname || ''}`.trim(),
+          fullName: `${profileData.user?.firstname || ''} ${profileData.user?.lastname || ''}`.trim(),
           email: profileData.user?.email || formData.email,
           username: profileData.user?.username,
           points: profileData.user?.point || 0,

@@ -4,7 +4,7 @@ import './Auth.css';
 
 const SignUp = ({ setUser }) => {
   const [formData, setFormData] = useState({
-    firstnam: '',
+    firstname: '',
     lastname: '',
     username: '',
     email: '',
@@ -27,8 +27,8 @@ const SignUp = ({ setUser }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.firstnam.trim()) {
-      newErrors.firstnam = 'First name is required';
+    if (!formData.firstname.trim()) {
+      newErrors.firstname = 'First name is required';
     }
 
     if (!formData.lastname.trim()) {
@@ -66,17 +66,17 @@ const SignUp = ({ setUser }) => {
       setIsLoading(true);
       try {
         const signupData = {
-          firstnam: formData.firstnam,
+          firstname: formData.firstname,
           lastname: formData.lastname,
           username: formData.username,
           email: formData.email,
           password: formData.password
         };
 
-        console.log('Sending signup request to:', `${BASE_URL}/vr/user/signup`);
+        console.log('Sending signup request to:', `${BASE_URL}/v1/user/signup`);
         console.log('Signup data:', signupData);
 
-        const response = await fetch(`${BASE_URL}/vr/user/signup`, {
+        const response = await fetch(`${BASE_URL}/v1/user/signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -145,17 +145,17 @@ const SignUp = ({ setUser }) => {
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="firstnam">First Name</label>
+            <label htmlFor="firstname">First Name</label>
             <input
               type="text"
-              id="firstnam"
-              name="firstnam"
-              value={formData.firstnam}
+              id="firstname"
+              name="firstname"
+              value={formData.firstname}
               onChange={handleChange}
-              className={errors.firstnam ? 'error' : ''}
+              className={errors.firstname ? 'error' : ''}
               placeholder="Enter your first name"
             />
-            {errors.firstnam && <span className="error-text">{errors.firstnam}</span>}
+            {errors.firstname && <span className="error-text">{errors.firstnam}</span>}
           </div>
 
           <div className="form-group">
