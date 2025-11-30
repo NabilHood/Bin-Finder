@@ -20,7 +20,7 @@ function App() {
           
           // Optional: Verify with backend that session is still valid
           try {
-            const response = await fetch('https://rv-nsoa.onrender.com/vr/user/profile', {
+            const response = await fetch('https://rv-n5oa.onrender.com/vr/user/profile', {
               method: 'GET',
               credentials: 'include'
             });

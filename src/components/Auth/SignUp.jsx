@@ -73,6 +73,9 @@ const SignUp = ({ setUser }) => {
           password: formData.password
         };
 
+        console.log('Sending signup request to:', `${BASE_URL}/vr/user/signup`);
+        console.log('Signup data:', signupData);
+
         const response = await fetch(`${BASE_URL}/vr/user/signup`, {
           method: 'POST',
           headers: {
@@ -82,10 +85,30 @@ const SignUp = ({ setUser }) => {
           body: JSON.stringify(signupData)
         });
 
+        //Check the response status and content type
+        const contentType = response.headers.get('content-type');
+        console.log('Response status:', response.status);
+        console.log('Content type:', contentType);
+
+        if (!contentType || !contentType.includes('application/json')) {
+          // If it's not JSON, read as text to see what we got
+          const textResponse = await response.text();
+          console.error('Non-JSON response received:', textResponse.substring(0, 500));
+          
+          if (response.status === 500) {
+            throw new Error('Server error. Please try again later.');
+          } else if (response.status === 0) {
+            throw new Error('Network error or CORS issue. Please check your connection.');
+          } else {
+            throw new Error(`Server returned an error (Status: ${response.status}). Please try again.`);
+          }
+        }
+
         const data = await response.json();
+        console.log('Signup response data:', data);
 
         if (!response.ok) {
-          throw new Error(data.message || 'Signup failed');
+          throw new Error(data.message || `Signup failed with status: ${response.status}`);
         }
 
         // Signup successful, redirect to login
