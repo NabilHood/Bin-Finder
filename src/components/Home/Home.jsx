@@ -41,13 +41,22 @@ function Home({ user }) {
   const position = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
   const navigate = useNavigate();
 
-  // For dropdown
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const categories = ['Recycling Bins', 'Recycling Centres', 'Donation Bins', 'Donation Centres'];
-  
+  // For category filter
+  const categories = ['Recycling Bin', 'Recycling Centre', 'Donation Bin', 'Donation Centre'];
+
+  const [selectedCategories, setSelectedCategories] = useState(categories);
+
+  const [appliedCategories, setAppliedCategories] = useState(categories);
+
   const handleCheckboxChange = (category) => {
     setSelectedCategories(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
   }
+
+  const applyFilter = () => {
+    setAppliedCategories(selectedCategories);
+  };
+
+  const filteredLocations = mapLocations.filter(loc => appliedCategories.includes(loc.type));
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -103,7 +112,7 @@ function Home({ user }) {
           />
           
           {/* Loop through all pin */}
-          {mapLocations.map((location) => (
+          {filteredLocations.map((location) => (
             <Marker 
               key={location.id}
               position={[location.lat, location.lng]}
@@ -194,8 +203,8 @@ function Home({ user }) {
               </label>
             ))}
 
-            <button className="filter-btn">Filter</button>
-          </div>
+              <button className="filter-btn" onClick={applyFilter}>Filter</button>
+            </div>
         </div>
       </div>
     </div>
