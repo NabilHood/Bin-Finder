@@ -118,15 +118,22 @@ function Home({ user }) {
               position={[location.lat, location.lng]}
               icon={createPin(location.type)} 
             >
-              <Popup>
+              <Popup minWidth={300} maxWidth={500}>
                 <div style={{ textAlign: 'center' }}>
                   <h3>{location.name}</h3>
                   <p style={{ margin: 0, color: 'gray' }}>{location.type}</p>
                   <hr style={{ margin: '5px 0' }}/>
                   <small>{location.address}</small>
+                  <hr style={{ margin: '5px 0' }}/>
+                  <button
+                    className="navigate-btn"
+                    onClick={() => handleNavigate(location.lat, location.lng)}
+                    style={{ marginRight: '5px' }}
+                  >
+                    Navigate
+                  </button>
                   {user && (
                     <>
-                      <hr style={{ margin: '5px 0' }}/>
                       <button className="report-btn">
                         Report Issue
                       </button>

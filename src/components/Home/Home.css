@@ -242,6 +242,22 @@
 }
 
 /* Popup report button */
+.navigate-btn {
+  background: #2865bb;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navigate-btn:hover {
+  background: rgb(21, 49, 121);
+}
+
 .report-btn {
   background: #dc3545;
   color: white;
