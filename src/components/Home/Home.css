@@ -43,6 +43,45 @@
   background: #e7e7e7;
 }
 
+/* User menu styles */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.welcome-text {
+  font-weight: 500;
+  color: #fafafa;
+}
+
+.user-points {
+  background: #fafafa;
+  color: #2E8B57;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Welcome banner */
+.welcome-banner {
+  background: linear-gradient(135deg, #2c5530, #4a7c59);
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+}
+
+.welcome-content h2 {
+  margin: 0 0 5px 0;
+  font-size: 1.4em;
+}
+
+.welcome-content p {
+  margin: 0;
+  opacity: 0.9;
+}
+
 /* --- Main Content Area --- */
 .main-content {
   display: flex;
@@ -80,6 +119,104 @@
   overflow-y: auto;
 }
 
+/* Sidebar styles for different user states */
+.user-stats {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.user-stats h3 {
+  margin-top: 0;
+  color: #2c5530;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.stat-label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: #2c5530;
+}
+
+.quick-actions {
+  margin-bottom: 20px;
+}
+
+.quick-actions h3 {
+  color: #2c5530;
+  margin-bottom: 15px;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #2c5530;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+  background: #1e3a24;
+}
+
+/* Guest sidebar styles */
+.signup-promo {
+  text-align: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.signup-promo h3 {
+  color: #2c5530;
+  margin-bottom: 15px;
+}
+
+.signup-promo ul {
+  text-align: left;
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.signup-promo li {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.signup-btn {
+  background: #2c5530;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.signup-btn:hover {
+  background: #1e3a24;
+}
+
 /* --- Map Pin --- */
 .custom-fa-icon {
   background: none !important;
@@ -104,6 +241,24 @@
   transition: transform 0.1s;
 }
 
+/* Popup report button */
+.report-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.report-btn:hover {
+  background: #c82333;
+}
+
+/* --- Dropdown list --- */
 .dropdown-btn {
   padding: 8px 12px;
   cursor: pointer;

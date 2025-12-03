@@ -28,7 +28,7 @@ const Dashboard = ({ user }) => {
         
         <div className="user-info">
           <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>User Type:</strong> {user.userType}</p>
+          <p><strong>Username:</strong> {user.username}</p>
           <p><strong>Points:</strong> {user.points} 🏆</p>
         </div>
 
