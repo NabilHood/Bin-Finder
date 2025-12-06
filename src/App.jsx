@@ -4,6 +4,7 @@ import SignUp from './components/Auth/SignUp';
 import Login from './components/Auth/Login';
 import Dashboard from './components/Auth/Dashboard';
 import Home from './components/Home/Home';
+import Admin from './components/Admin/Admin';
 import './App.css';
 
 function App() {
@@ -92,6 +93,10 @@ function App() {
           <Route 
             path="/dashboard" 
             element={user ? <Dashboard user={user} /> : <Navigate to="/" />} 
+          />
+          <Route 
+            path="/admin" 
+            element={<Admin setUser={setUser} />} 
           />
           {/* Add a catch-all route for undefined paths */}
           <Route 

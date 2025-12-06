@@ -114,6 +114,12 @@ function Home({ user }) {
           {user ? (
             // Show user info and logout when logged in
             <div className="user-menu">
+              
+              {/* Button to Admin Page, currently available for everyone including users */}
+              <button className="nav-login-btn" onClick={() => navigate('/admin')}>
+                Admin Controls
+              </button>
+              
               <span className="welcome-text">Welcome, {user.fullName}!</span>
               <span className="user-points">{user.points} pts</span>
               <button className="nav-login-btn" onClick={handleLogout}>
