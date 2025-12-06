@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './Home.css';
 
@@ -38,7 +39,7 @@ const createPin = (type) => {
 };
 
 function Home({ user }) {
-  const position = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
+  const mapCenter = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
   const navigate = useNavigate();
 
   // For category filter
@@ -63,6 +64,46 @@ function Home({ user }) {
     // Refresh the page to update the user state
     window.location.reload();
   }
+
+  // Get user location
+  const [userLocation, setUserLocation] = useState(null);
+
+  const handleGetUserLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        // Set the user location pin
+        setUserLocation({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        alert("Unable to retrieve your location.");
+      }
+    );
+  }
+
+  function FlyToUserLocation({ userLocation }) {
+    const map = useMap();
+
+    useEffect(() => {
+      if (userLocation) {
+        map.flyTo([userLocation.lat, userLocation.lng], 14.5, {
+          duration: 2 
+        });
+      }
+    }, [userLocation, map]);
+
+    return null;
+  }
+
+  useEffect(() => {
+    handleGetUserLocation();
+  }, []);
 
   return (
     <div className="home-container">
@@ -100,8 +141,9 @@ function Home({ user }) {
 
       {/* Main Content Area */}
       <div className="main-content">
+        {/* Map */}
         <MapContainer 
-          center={position} 
+          center={mapCenter}
           zoom={14.5} 
           scrollWheelZoom={true} 
           className="leaflet-container"
@@ -110,6 +152,24 @@ function Home({ user }) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+
+          <FlyToUserLocation userLocation={userLocation} />
+
+          {/* User Location Pin */}
+          {userLocation && (
+            <CircleMarker 
+              center={[userLocation.lat, userLocation.lng]}
+              radius={9} 
+              pathOptions={{ 
+                color: 'white', 
+                fillColor: '#007bff',
+                fillOpacity: 1,
+                weight: 2
+              }}
+            >
+              <Popup>You are here</Popup>
+            </CircleMarker>
+          )}
           
           {/* Loop through all pin */}
           {filteredLocations.map((location) => (
@@ -118,15 +178,22 @@ function Home({ user }) {
               position={[location.lat, location.lng]}
               icon={createPin(location.type)} 
             >
-              <Popup>
+              <Popup minWidth={300} maxWidth={500}>
                 <div style={{ textAlign: 'center' }}>
                   <h3>{location.name}</h3>
                   <p style={{ margin: 0, color: 'gray' }}>{location.type}</p>
                   <hr style={{ margin: '5px 0' }}/>
                   <small>{location.address}</small>
+                  <hr style={{ margin: '5px 0' }}/>
+                  <button
+                    className="navigate-btn"
+                    onClick={() => handleNavigate(location.lat, location.lng)}
+                    style={{ marginRight: '5px' }}
+                  >
+                    Navigate
+                  </button>
                   {user && (
                     <>
-                      <hr style={{ margin: '5px 0' }}/>
                       <button className="report-btn">
                         Report Issue
                       </button>
