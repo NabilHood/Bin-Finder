@@ -96,7 +96,7 @@ function App() {
           />
           <Route 
             path="/admin" 
-            element={<Admin setUser={setUser} />} 
+            element={<Admin user={user} setUser={setUser} />} 
           />
           {/* Add a catch-all route for undefined paths */}
           <Route 
