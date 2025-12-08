@@ -80,7 +80,7 @@ function Admin() {
     setActionLoading(prev => ({ ...prev, [userId]: true }));
     
     try {
-      const response = await fetch(`${BASE_URL}/v1/user/${userId}/make-admin`, {
+      const response = await fetch(`${BASE_URL}/v1/user/change/role/${userId}/admin`, {
         method: 'PUT',
         credentials: 'include',
         headers: {
@@ -92,15 +92,12 @@ function Admin() {
         throw new Error(`Failed to update user role: ${response.status}`);
       }
 
-      const updatedUser = await response.json();
-      
-      // Update user in local state
       setUsers(prev => prev.map(user => 
-        user._id === userId ? { ...user, role: updatedUser.role || 'admin' } : user
+        user._id === userId ? { ...user, role: 'admin' } : user
       ));
       
       setFilteredUsers(prev => prev.map(user => 
-        user._id === userId ? { ...user, role: updatedUser.role || 'admin' } : user
+        user._id === userId ? { ...user, role: 'admin' } : user
       ));
       
       setMessage({ type: 'success', text: `User ${email} is now an admin.` });
@@ -110,7 +107,50 @@ function Admin() {
       
     } catch (err) {
       console.error('Admin update error:', err);
-      setMessage({ type: 'error', text: `Failed to update user: ${err.message}` });
+      setMessage({ type: 'error', text: `Failed to update user role: ${err.message}` });
+      
+      // Clear error message after 3 seconds
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    } finally {
+      setActionLoading(prev => ({ ...prev, [userId]: false }));
+    }
+  };
+
+  // Make user regular user (demote from admin)
+  const makeUserRegular = async (userId, email) => {
+    setActionLoading(prev => ({ ...prev, [userId]: true }));
+    
+    try {
+      // Corrected endpoint based on API documentation
+      const response = await fetch(`${BASE_URL}/v1/user/change/role/${userId}/user`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update user role: ${response.status}`);
+      }
+
+      // Update user in local state
+      setUsers(prev => prev.map(user => 
+        user._id === userId ? { ...user, role: 'user' } : user
+      ));
+      
+      setFilteredUsers(prev => prev.map(user => 
+        user._id === userId ? { ...user, role: 'user' } : user
+      ));
+      
+      setMessage({ type: 'success', text: `User ${email} is now a regular user.` });
+      
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+      
+    } catch (err) {
+      console.error('User role update error:', err);
+      setMessage({ type: 'error', text: `Failed to update user role: ${err.message}` });
       
       // Clear error message after 3 seconds
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
@@ -239,6 +279,18 @@ function Admin() {
                         title="Make Admin"
                       >
                         {actionLoading[user._id] ? 'Processing...' : 'Make Admin'}
+                      </button>
+                    )}
+                    
+                    {/* Make Regular User Button - only show if user is admin */}
+                    {user.role === 'admin' && (
+                      <button
+                        onClick={() => makeUserRegular(user._id, user.email)}
+                        disabled={actionLoading[user._id]}
+                        className="btn-regular"
+                        title="Make Regular User"
+                      >
+                        {actionLoading[user._id] ? 'Processing...' : 'Make Regular'}
                       </button>
                     )}
                     
