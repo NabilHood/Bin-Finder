@@ -5,13 +5,47 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.admin-container h2 {
-  color: #2E8B57;
-  margin: 0 0 30px 0;
-  font-size: 2rem;
-  text-align: center;
+/* Admin Header */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
   padding-bottom: 15px;
   border-bottom: 2px solid #e1e5e9;
+}
+
+.admin-header h2 {
+  color: #2E8B57;
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Home Button */
+.btn-home {
+  padding: 10px 20px;
+  background: #2E8B57;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-home:hover {
+  background: #26734d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(46, 139, 87, 0.2);
+}
+
+.btn-home i {
+  font-size: 16px;
 }
 
 /* Message styles */
@@ -218,6 +252,10 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .error-message {
@@ -261,9 +299,14 @@
     padding: 15px;
   }
   
-  .admin-container h2 {
+  .admin-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .admin-header h2 {
     font-size: 1.5rem;
-    margin-bottom: 20px;
   }
   
   .search-container {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Admin.css';
 
 function Admin() {
@@ -177,6 +177,11 @@ function Admin() {
     }
   };
 
+  // Go to Home function
+  const goToHome = () => {
+    navigate('/');
+  };
+
   // Load users on component mount
   useEffect(() => {
     const loadUsers = async () => {
@@ -201,6 +206,9 @@ function Admin() {
     return (
       <div className="admin-container">
         <div className="loading">Loading user list...</div>
+        <button onClick={goToHome} className="btn-home">
+          Home
+        </button>
       </div>
     );
   }
@@ -212,13 +220,21 @@ function Admin() {
         <button onClick={() => window.location.reload()} className="retry-btn">
           Retry
         </button>
+        <button onClick={goToHome} className="btn-home">
+          Home
+        </button>
       </div>
     );
   }
 
   return (
     <div className="admin-container">
-      <h2>Admin Dashboard</h2>
+      <div className="admin-header">
+        <h2>Admin Dashboard</h2>
+        <button onClick={goToHome} className="btn-home">
+          <i className="fas fa-home"></i> Home
+        </button>
+      </div>
       
       {/* Message display */}
       {message.text && (
@@ -316,6 +332,9 @@ function Admin() {
       ) : (
         <div className="no-users">
           {searchTerm ? 'No users match your search.' : 'No users found.'}
+          <button onClick={goToHome} className="btn-home">
+            Home
+          </button>
         </div>
       )}
     </div>
