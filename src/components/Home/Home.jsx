@@ -93,7 +93,7 @@ function Home({ user }) {
     useEffect(() => {
       if (userLocation) {
         map.flyTo([userLocation.lat, userLocation.lng], 14.5, {
-          duration: 2 
+          duration: 1
         });
       }
     }, [userLocation, map]);
