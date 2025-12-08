@@ -1,0 +1,50 @@
+/* Container to make the table center */
+._table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Colour */
+._table thead {
+  background: #2f855a;
+  color: white;
+  font-weight: bold;
+}
+
+._table th,
+._table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Remove border under last row */
+._table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Alternating background rows */
+._table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect */
+._table tbody tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+/* Center the page title */
+h2 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 28px;
+  color: #333;
+}
