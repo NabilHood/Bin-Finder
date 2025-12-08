@@ -68,7 +68,6 @@ function Admin() {
       console.error('Delete error:', err);
       setMessage({ type: 'error', text: `Failed to delete user: ${err.message}` });
       
-      // Clear error message after 3 seconds
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     } finally {
       setActionLoading(prev => ({ ...prev, [userId]: false }));
@@ -109,7 +108,6 @@ function Admin() {
       console.error('Admin update error:', err);
       setMessage({ type: 'error', text: `Failed to update user role: ${err.message}` });
       
-      // Clear error message after 3 seconds
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     } finally {
       setActionLoading(prev => ({ ...prev, [userId]: false }));
@@ -121,7 +119,6 @@ function Admin() {
     setActionLoading(prev => ({ ...prev, [userId]: true }));
     
     try {
-      // Corrected endpoint based on API documentation
       const response = await fetch(`${BASE_URL}/v1/user/change/role/${userId}/user`, {
         method: 'PUT',
         credentials: 'include',
@@ -152,7 +149,6 @@ function Admin() {
       console.error('User role update error:', err);
       setMessage({ type: 'error', text: `Failed to update user role: ${err.message}` });
       
-      // Clear error message after 3 seconds
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     } finally {
       setActionLoading(prev => ({ ...prev, [userId]: false }));
