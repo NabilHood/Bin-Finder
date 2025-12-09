@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import './Home.css';
 
 // Temporary data
@@ -41,6 +42,8 @@ const createPin = (type) => {
 function Home({ user }) {
   const mapCenter = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
   const navigate = useNavigate();
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   // For category filter
   const categories = ['Recycling Bin', 'Recycling Centre', 'Donation Bin', 'Donation Centre'];
@@ -114,11 +117,30 @@ function Home({ user }) {
           {user ? (
             // Show user info and logout when logged in
             <div className="user-menu">
-              
-              {/* Button to Admin Page, currently available for everyone including users */}
-              <button className="nav-login-btn" onClick={() => navigate('/admin')}>
-                Admin Controls
-              </button>
+              <div className="dropdown-wrapper">
+                <button
+                  className="dropdown-btn"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  Menu <span>{dropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+                </button>
+              </div>
+
+                {dropdownOpen && (
+                  <div className="dropdown-panel">
+                    <button className="dropdown-item">
+                      Profile
+                    </button>
+                    <button className="dropdown-item">
+                      Minigame
+                    </button>
+
+                    {/* Button to Admin Page, currently available for everyone including users */}
+                    <button className="dropdown-item" onClick={() => navigate('/admin')}>
+                      Admin Controls
+                    </button>
+                  </div>
+                )}
               
               <span className="welcome-text">Welcome, {user.fullName}!</span>
               <span className="user-points">{user.points} pts</span>
@@ -261,11 +283,11 @@ function Home({ user }) {
           )}
 
           {/* Category Filtering (for all users) */}
-          <div className="dropdown-list">
+          <div className="category-list">
             <p><b>Category</b></p>
 
             {categories.map(category => (
-              <label key={category} className="dropdown-item">
+              <label key={category} className="category-item">
                 <input
                   type="checkbox"
                   value={category}
