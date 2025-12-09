@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap } from 're
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Logo from "../../assets/BinFinderLogo.png";
 import './Home.css';
 
 // Temporary data
@@ -112,7 +113,10 @@ function Home({ user }) {
     <div className="home-container">
       {/* Top Menu Bar */}
       <nav className="navbar">
-        <div className="nav-logo">BinFinder</div>
+        <div className="logo-title">
+          <img src={Logo} height={50} alt="Logo" />
+          <div className="nav-title">BinFinder</div>
+        </div>
         <div className="menu-right">
           {user ? (
             // Show user info and logout when logged in
