@@ -99,15 +99,14 @@ function App() {
             path="/admin" 
             element={<Admin user={user} setUser={setUser} />} 
           />
+          <Route
+            path="/farm"
+            element={<FarmingSimulator user={user} />}
+          />
           {/* Add a catch-all route for undefined paths */}
           <Route 
             path="*" 
             element={<Navigate to="/" />} 
-          />
-          <Route
-            path="/farm"
-            // Optionally protect this route so only logged-in users can access it
-            element={user ? <FarmingSimulator /> : <Navigate to="/login" />}
           />
         </Routes>
       </div>
