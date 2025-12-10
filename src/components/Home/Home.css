@@ -19,7 +19,13 @@
   z-index: 100;
 }
 
-.nav-logo {
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #fafafa;
@@ -94,6 +100,7 @@
   gap: 20px;
   padding: 15px 25px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .leaflet-container {
@@ -274,17 +281,9 @@
   background: #c82333;
 }
 
-/* --- Dropdown list --- */
-.dropdown-btn {
-  padding: 8px 12px;
-  cursor: pointer;
-  background-color: #2E8B57;
-  color: white;
-  border: none;
-  border-radius: 4px;
-}
+/*Category filter*/
 
-.dropdown-list {
+.category-list {
   margin-top: 8px;
   border: 1px solid #ccc;
   padding: 10px;
@@ -293,11 +292,11 @@
   text-align: left;
 }
 
-.dropdown-item {
-  display: flex;         /* checkbox and text in a row */
-  align-items: center;   /* vertically center them */
-  gap: 16px;             /* space between checkbox and text */
-  margin: 10px;    /* space between items */
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 10px;
 }
 
 .filter-btn {
@@ -316,4 +315,79 @@
 
 .filter-btn:hover {
   background: #26734d;
+}
+
+/* User menu dropdown */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: #fafafa;
+  color: #2E8B57;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 60px;
+  width: 200px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px 0px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+.dropdown-item {
+  width: 160px;
+  background: white;
+  color: #2E8B57;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #afafaf;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.address-form {
+  padding: 12px;
+}
+
+.text-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }

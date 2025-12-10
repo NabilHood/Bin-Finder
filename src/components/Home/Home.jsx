@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Logo from "../../assets/BinFinderLogo.png";
 import './Home.css';
 
 // Temporary data
@@ -42,6 +44,8 @@ function Home({ user }) {
   const mapCenter = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
   const navigate = useNavigate();
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   // For category filter
   const categories = ['Recycling Bin', 'Recycling Centre', 'Donation Bin', 'Donation Centre'];
 
@@ -58,6 +62,14 @@ function Home({ user }) {
   };
 
   const filteredLocations = mapLocations.filter(loc => appliedCategories.includes(loc.type));
+
+  const [isAddingPin, setShowAddingPin] = useState(false);
+
+  const [selectedPinTypeToAdd, setSelectedPinType] = useState("Recycling Bin");
+
+  const setIsAddingPin = () => {
+    setShowAddingPin(prev => !prev);
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -109,11 +121,39 @@ function Home({ user }) {
     <div className="home-container">
       {/* Top Menu Bar */}
       <nav className="navbar">
-        <div className="nav-logo">BinFinder</div>
+        <div className="logo-title">
+          <img src={Logo} height={50} alt="Logo" />
+          <div className="nav-title">BinFinder</div>
+        </div>
         <div className="menu-right">
           {user ? (
             // Show user info and logout when logged in
             <div className="user-menu">
+              <div className="dropdown-wrapper">
+                <button
+                  className="dropdown-btn"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  Menu <span>{dropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+                </button>
+              </div>
+
+                {dropdownOpen && (
+                  <div className="dropdown-panel">
+                    <button className="dropdown-item">
+                      Profile
+                    </button>
+                    <button className="dropdown-item" onClick={() => navigate('/farm')}>
+                      Minigame
+                    </button>
+
+                    {/* Button to Admin Page, currently available for everyone including users */}
+                    <button className="dropdown-item" onClick={() => navigate('/admin')}>
+                      Admin Controls
+                    </button>
+                  </div>
+                )}
+              
               <span className="welcome-text">Welcome, {user.fullName}!</span>
               <span className="user-points">{user.points} pts</span>
               <button className="nav-login-btn" onClick={handleLogout}>
@@ -157,6 +197,7 @@ function Home({ user }) {
 
           {/* User Location Pin */}
           {userLocation && (
+            <>
             <CircleMarker 
               center={[userLocation.lat, userLocation.lng]}
               radius={9} 
@@ -169,6 +210,23 @@ function Home({ user }) {
             >
               <Popup>You are here</Popup>
             </CircleMarker>
+            
+            {isAddingPin && (
+              <>
+                <Marker
+                  position={[userLocation.lat, userLocation.lng]}
+                  icon={createPin(selectedPinTypeToAdd)}
+                >
+                  <Popup>
+                    <b>Adding a pin to your location</b>
+                  </Popup>
+                </Marker>
+                <div className="map-overlay">
+                  <h3>Adding a pin to your location</h3>
+                </div>
+              </>
+            )}
+            </>
           )}
           
           {/* Loop through all pin */}
@@ -207,34 +265,76 @@ function Home({ user }) {
 
         <div className="sidebar">
           {user ? (
-            // Logged-in user sidebar
-            <div className="user-sidebar">
-              <div className="user-stats">
-                <h3>Your Stats</h3>
-                <div className="stat-item">
-                  <span className="stat-label">Points Earned:</span>
-                  <span className="stat-value">{user.points}</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-label">Pins Created:</span>
-                  <span className="stat-value">{user.pinCount || 0}</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-label">Reports Submitted:</span>
-                  <span className="stat-value">{user.reportedPinCount || 0}</span>
-                </div>
-              </div>
+            <>
+            {isAddingPin ? (
+              <div className='category-list'>
+                <button className="action-btn" onClick={setIsAddingPin}>
+                  Back
+                </button>
 
-              <div className="quick-actions">
-                <h3>Quick Actions</h3>
-                <button className="action-btn">
-                  📸 Add New Pin
-                </button>
-                <button className="action-btn">
-                  📊 View Your Pins
+                <p><b>Select pin type:</b></p>
+
+                {categories.map((category) => (
+                  <label key={category} className='category-item'>
+                    <input
+                      type="radio"
+                      name="pinType"
+                      value={category}
+                      checked={selectedPinTypeToAdd === category}
+                      onChange={() => setSelectedPinType(category)}
+                    />
+                    {category}
+                  </label>
+                ))}
+
+                <div className='address-form'>
+                  <p><b>Address:</b></p>
+
+                  <input className='text-input'
+                    type='text'
+                    placeholder='No.1, Jalan Dua, Taman Tiga,'
+                  />
+                  <input className='text-input'
+                    type='text'
+                    placeholder='45678, Negeri Sembilan'
+                  />
+                </div>
+
+                <button className='action-btn'>
+                  Submit
                 </button>
               </div>
-            </div>
+            ) : (
+              // Logged-in user sidebar
+              <div className="user-sidebar">
+                <div className="user-stats">
+                  <h3>Your Stats</h3>
+                  <div className="stat-item">
+                    <span className="stat-label">Points Earned:</span>
+                    <span className="stat-value">{user.points}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Pins Created:</span>
+                    <span className="stat-value">{user.pinCount || 0}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Reports Submitted:</span>
+                    <span className="stat-value">{user.reportedPinCount || 0}</span>
+                  </div>
+                </div>
+
+                <div className="quick-actions">
+                  <h3>Quick Actions</h3>
+                  <button className="action-btn" onClick={setIsAddingPin}>
+                    📸 Add New Pin
+                  </button>
+                  <button className="action-btn">
+                    📊 View Your Pins
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
           ) : (
             // Guest user sidebar
             <div className="guest-sidebar">
@@ -254,24 +354,26 @@ function Home({ user }) {
             </div>
           )}
 
-          {/* Category Filtering (for all users) */}
-          <div className="dropdown-list">
-            <p><b>Category</b></p>
+          {!isAddingPin && (
+            // Category Filtering (for all users)
+            <div className="category-list">
+              <p><b>Category</b></p>
 
-            {categories.map(category => (
-              <label key={category} className="dropdown-item">
-                <input
-                  type="checkbox"
-                  value={category}
-                  checked={selectedCategories.includes(category)}
-                  onChange={() => handleCheckboxChange(category)}
-                />
-                {category}
-              </label>
-            ))}
+              {categories.map(category => (
+                <label key={category} className="category-item">
+                  <input
+                    type="checkbox"
+                    value={category}
+                    checked={selectedCategories.includes(category)}
+                    onChange={() => handleCheckboxChange(category)}
+                  />
+                  {category}
+                </label>
+              ))}
 
-              <button className="filter-btn" onClick={applyFilter}>Filter</button>
+                <button className="filter-btn" onClick={applyFilter}>Filter</button>
             </div>
+          )}
         </div>
       </div>
     </div>
