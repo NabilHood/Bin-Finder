@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useActionState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -43,6 +43,7 @@ const createPin = (type) => {
 function Home({ user }) {
   const mapCenter = [2.9278, 101.6419];  // Coordinates for the Cyberjaya for the map
   const navigate = useNavigate();
+  const [isLoadingAction, setIsLoadingAction] = useState(false);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -63,6 +64,7 @@ function Home({ user }) {
 
   const filteredLocations = mapLocations.filter(loc => appliedCategories.includes(loc.type));
 
+  // Adding pin
   const [isAddingPin, setShowAddingPin] = useState(false);
 
   const [selectedPinTypeToAdd, setSelectedPinType] = useState("Recycling Bin");
@@ -76,6 +78,65 @@ function Home({ user }) {
     // Refresh the page to update the user state
     window.location.reload();
   }
+  
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [address3, setAddress3] = useState("");
+  const [description, setDescription] = useState("");
+
+  const submitNewPin = async (lat, lng, address1, address2, address3, description) => {
+    const fullAddress = address1 + " " + address2 + " " + address3;
+
+    if (!lat || !lng) {
+      alert("Unable to detect your location, please try again.");
+      return;
+
+    } else if (!fullAddress.trim() || !description.trim()) {
+      alert("Please fill in all the required information.");
+      return;
+    }
+
+    setIsLoadingAction(true);
+
+    try {
+      const newPinData = {
+        location: {
+          longitude: lng,
+          latitude: lat
+        },
+        adder: fullAddress,
+        type: selectedPinTypeToAdd,
+        infomation: description
+      };
+      console.log(newPinData)
+
+      const response = await fetch('https://rv-n5oa.onrender.com/v1/pin/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(newPinData)
+      });
+
+      if (!response.ok) {
+        setIsLoadingAction(false)
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Pin created:', result);
+      alert("Your pin has been successfully submitted!");
+
+      setShowAddingPin(false);
+      setIsLoadingAction(false);
+
+    } catch (error) {
+      console.error('Error creating pin:', error);
+      alert('Failed to create pin. Please try again.');
+      setIsLoadingAction(false);
+    }
+  };
 
   // Get user location
   const [userLocation, setUserLocation] = useState(null);
@@ -133,6 +194,7 @@ function Home({ user }) {
                 <button
                   className="dropdown-btn"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
+                  disabled={isLoadingAction}
                 >
                   Menu <span>{dropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
                 </button>
@@ -156,7 +218,7 @@ function Home({ user }) {
               
               <span className="welcome-text">Welcome, {user.fullName}!</span>
               <span className="user-points">{user.points} pts</span>
-              <button className="nav-login-btn" onClick={handleLogout}>
+              <button className="nav-login-btn" onClick={handleLogout} disabled={isLoadingAction}>
                 Log Out
               </button>
             </div>
@@ -268,7 +330,7 @@ function Home({ user }) {
             <>
             {isAddingPin ? (
               <div className='category-list'>
-                <button className="action-btn" onClick={setIsAddingPin}>
+                <button className="action-btn" onClick={setIsAddingPin} disabled={isLoadingAction}>
                   Back
                 </button>
 
@@ -293,16 +355,42 @@ function Home({ user }) {
                   <input className='text-input'
                     type='text'
                     placeholder='No.1, Jalan Dua, Taman Tiga,'
+                    value={address1}
+                    onChange={(e) => setAddress1(e.target.value)}
                   />
                   <input className='text-input'
                     type='text'
                     placeholder='45678, Negeri Sembilan'
+                    value={address2}
+                    onChange={(e) => setAddress2(e.target.value)}
+                  />
+                  <input className='text-input'
+                    type='text'
+                    placeholder="..."
+                    value={address3}
+                    onChange={(e) => setAddress3(e.target.value)}
                   />
                 </div>
 
-                <button className='action-btn'>
-                  Submit
+                <div className='address-form'>
+                  <p><b>Description:</b></p>
+
+                  <input className='text-input'
+                    type='text'
+                    placeholder='A DIY mini recycle bin?'
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </div>
+
+                <button
+                  className='action-btn'
+                  onClick={() => submitNewPin(userLocation.lat, userLocation.lng, address1, address2, address3, description)}
+                  disabled={isLoadingAction}
+                >
+                  {isLoadingAction ? "Submitting..." : "Submit"}
                 </button>
+
               </div>
             ) : (
               // Logged-in user sidebar
