@@ -202,7 +202,7 @@ function Home({ user }) {
 
                 {dropdownOpen && (
                   <div className="dropdown-panel">
-                    <button className="dropdown-item">
+                    <button className="dropdown-item" onClick={() => navigate('/profile')}>
                       Profile
                     </button>
                     <button className="dropdown-item" onClick={() => navigate('/farm')}>
