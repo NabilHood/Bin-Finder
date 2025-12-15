@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from "../../assets/BinFinderLogo.png";
 import './Admin.css';
 
 function Admin({ user, setUser }) {
@@ -154,7 +155,6 @@ function Admin({ user, setUser }) {
 
     setIsLoadingAction(true);
     try {
-      // DELETE user endpoint - needs to be implemented
       const response = await fetch(`${BASE_URL}/v1/user/delete/${userId}`, {
         method: 'DELETE',
         credentials: 'include'
@@ -340,8 +340,10 @@ function Admin({ user, setUser }) {
   return (
     <div className="admin-container">
       <nav className="navbar">
-        <div className="nav-logo">BinFinder Admin</div>
-
+        <div className="logo-title">
+          <img src={Logo} height={50} alt="Logo" />
+          <div className="nav-title">BinFinder Admin</div>
+        </div>
         <div className="menu-right">
           {user ? (
             <div className="user-menu">
@@ -691,11 +693,6 @@ function Admin({ user, setUser }) {
             </div>
           </div>
         )}
-
-        {/* Endpoint Reference */}
-        <div className="admin-note">
-          <p><strong>Note:</strong> User deletion endpoint (<code>/v1/user/delete/:userId</code>) needs to be implemented.</p>
-        </div>
       </div>
     </div>
   );
