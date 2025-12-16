@@ -7,8 +7,8 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Logo from "../../assets/BinFinderLogo.png";
 import './Home.css';
 
-// Temporary data
-import { mapLocations } from './tempdata.js';
+// Temporary data (pending removal)
+// import { mapLocations } from './tempdata.js';
 
 // Create bin icon for pin
 const getIconStyle = (type) => {
@@ -47,28 +47,61 @@ function Home({ user }) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // Retrieve pin list from server
+  const [mapLocations, setMapLocations] = useState([]);
+  const [isLoadingPins, setIsLoadingPins] = useState(true);
+  useEffect(() => {
+    const fetchPins = async () => {
+      try {
+        const response = await fetch('https://rv-n5oa.onrender.com/v1/pin/list', {
+            method: 'GET',
+            credentials: 'include'
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const formattedPins = data.pins.map(pin => ({
+          id: pin._id,
+          lat: pin.location.latitude,
+          lng: pin.location.longitude,
+          name: pin.infomation, // Using "infomation" as name cuz there is no other data for names :)
+          type: pin.type,
+          address: pin.adder,
+        }));
+
+        setMapLocations(formattedPins);
+      } catch (error) {
+        console.error('Failed to fetch pins:', error);
+        alert('Failed to load map locations.');
+      } finally {
+        setIsLoadingPins(false);
+      }
+    };
+
+    fetchPins();
+  }, []);
+
+
   // For category filter
   const categories = ['Recycling Bin', 'Recycling Centre', 'Donation Bin', 'Donation Centre'];
-
   const [selectedCategories, setSelectedCategories] = useState(categories);
-
   const [appliedCategories, setAppliedCategories] = useState(categories);
-
   const handleCheckboxChange = (category) => {
     setSelectedCategories(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
   }
-
   const applyFilter = () => {
     setAppliedCategories(selectedCategories);
   };
-
   const filteredLocations = mapLocations.filter(loc => appliedCategories.includes(loc.type));
 
   // Adding pin
   const [isAddingPin, setShowAddingPin] = useState(false);
-
   const [selectedPinTypeToAdd, setSelectedPinType] = useState("Recycling Bin");
-
   const setIsAddingPin = () => {
     setShowAddingPin(prev => !prev);
   }
@@ -255,6 +288,12 @@ function Home({ user }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
+            {isLoadingPins && (
+              <div className="map-overlay">
+                <h3>Loading locations...</h3>
+              </div>
+            )}
+
           <FlyToUserLocation userLocation={userLocation} />
 
           {/* User Location Pin */}
@@ -373,7 +412,7 @@ function Home({ user }) {
                 </div>
 
                 <div className='address-form'>
-                  <p><b>Description:</b></p>
+                  <p><b>Name:</b></p>
 
                   <input className='text-input'
                     type='text'
