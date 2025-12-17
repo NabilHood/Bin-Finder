@@ -603,14 +603,14 @@ function Admin({ user, setUser }) {
                             className="action-btn approve-btn"
                             disabled={isLoadingAction}
                           >
-                            Approve (a)
+                            Approve
                           </button>
                           <button
                             onClick={() => handleRejectAddition(pin.id || pin._id)}
                             className="action-btn reject-btn"
                             disabled={isLoadingAction}
                           >
-                            Reject (r)
+                            Reject
                           </button>
                         </td>
                       </tr>
