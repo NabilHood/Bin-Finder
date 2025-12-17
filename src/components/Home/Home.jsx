@@ -106,6 +106,41 @@ function Home({ user }) {
     setShowAddingPin(prev => !prev);
   }
 
+  // View user pins panel
+  const [showUserPinsPanel, setShowUserPinsPanel] = useState(false);
+  const [userPins, setUserPins] = useState([]);
+  const [isLoadingUserPins, setIsLoadingUserPins] = useState(false);
+  const [pinStatusFilter, setPinStatusFilter] = useState('all');
+  const [pinCategoryFilter, setPinCategoryFilter] = useState({
+    'Recycling Bin': true,
+    'Recycling Centre': true,
+    'Donation Bin': true,
+    'Donation Centre': true
+  });
+
+  const handleViewUserPins = async () => {
+    setShowUserPinsPanel(true);
+    setIsLoadingUserPins(true);
+    try {
+      const response = await fetch('https://rv-n5oa.onrender.com/v1/user/profile', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUserPins(data.pins || []);
+    } catch (error) {
+      console.error('Failed to fetch user pins:', error);
+      alert(`Failed to load your pins: ${error.message}`);
+    } finally {
+      setIsLoadingUserPins(false);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     // Refresh the page to update the user state
@@ -364,10 +399,105 @@ function Home({ user }) {
           ))}
         </MapContainer>
 
+
+
         <div className="sidebar">
           {user ? (
             <>
-            {isAddingPin ? (
+            {showUserPinsPanel ? (
+              <div className='category-list'>
+                <button className="action-btn" onClick={() => setShowUserPinsPanel(false)} disabled={isLoadingUserPins}>
+                  Back
+                </button>
+
+                <p><b>Filter by Category:</b></p>
+
+                {categories.map((category) => (
+                  <label key={category} className='category-item'>
+                    <input
+                      type="checkbox"
+                      checked={pinCategoryFilter[category]}
+                      onChange={(e) => setPinCategoryFilter({
+                        ...pinCategoryFilter,
+                        [category]: e.target.checked
+                      })}
+                    />
+                    {category}
+                  </label>
+                ))}
+
+                <p><b>Filter by Status:</b></p>
+
+                <label className='category-item'>
+                  <input
+                    type="radio"
+                    name="pinStatus"
+                    value="all"
+                    checked={pinStatusFilter === 'all'}
+                    onChange={() => setPinStatusFilter('all')}
+                  />
+                  All Pins
+                </label>
+
+                <label className='category-item'>
+                  <input
+                    type="radio"
+                    name="pinStatus"
+                    value="pending"
+                    checked={pinStatusFilter === 'pending'}
+                    onChange={() => setPinStatusFilter('pending')}
+                  />
+                  Pending
+                </label>
+
+                <label className='category-item'>
+                  <input
+                    type="radio"
+                    name="pinStatus"
+                    value="approved"
+                    checked={pinStatusFilter === 'approved'}
+                    onChange={() => setPinStatusFilter('approved')}
+                  />
+                  Approved
+                </label>
+
+                <p><b>Your Pins:</b></p>
+
+                {isLoadingUserPins ? (
+                  <p style={{textAlign: 'center', padding: '20px'}}>Loading your pins...</p>
+                ) : (() => {
+                  const filteredPins = userPins.filter(pin => {
+                    // Filter by status
+                    let statusMatch = true;
+                    if (pinStatusFilter === 'pending') statusMatch = pin.status === 'pending';
+                    if (pinStatusFilter === 'approved') statusMatch = pin.status === 'approved' || pin.status === 'active';
+                    
+                    // Filter by category
+                    const categoryMatch = pinCategoryFilter[pin.type];
+                    
+                    return statusMatch && categoryMatch;
+                  });
+                  
+                  return filteredPins.length > 0 ? (
+                    <div className="user-pins-list">
+                      {filteredPins.map((pin, index) => (
+                        <div key={pin._id || index} className="user-pin-item">
+                          <h4>{pin.infomation || 'Unnamed Pin'}</h4>
+                          <p><strong>Type:</strong> {pin.type}</p>
+                          <p><strong>Address:</strong> {pin.adder}</p>
+                          <p><strong>Status:</strong> <span className={`status-badge ${pin.status}`}>{pin.status}</span></p>
+                          <p style={{fontSize: '12px', color: '#666'}}>{pin.location?.latitude?.toFixed(6)}, {pin.location?.longitude?.toFixed(6)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{textAlign: 'center', padding: '20px'}}>
+                      No pins match the selected filters.
+                    </p>
+                  );
+                })()}
+              </div>
+            ) : isAddingPin ? (
               <div className='category-list'>
                 <button className="action-btn" onClick={setIsAddingPin} disabled={isLoadingAction}>
                   Back
@@ -455,7 +585,7 @@ function Home({ user }) {
                   <button className="action-btn" onClick={setIsAddingPin}>
                     📸 Add New Pin
                   </button>
-                  <button className="action-btn">
+                  <button className="action-btn" onClick={handleViewUserPins}>
                     📊 View Your Pins
                   </button>
                 </div>
