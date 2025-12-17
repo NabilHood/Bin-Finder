@@ -7,8 +7,9 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Logo from "../../assets/BinFinderLogo.png";
 import './Home.css';
 
-// Temporary data (pending removal)
-// import { mapLocations } from './tempdata.js';
+// API Key for routing services
+const API_KEY = import.meta.env.VITE_GEOAPIFY_KEY;
+const MAP_STYLE = "klokantech-basic"
 
 // Create bin icon for pin
 const getIconStyle = (type) => {
@@ -284,8 +285,9 @@ function Home({ user }) {
           className="leaflet-container"
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | © OpenStreetMap <a href="https://www.openstreetmap.org/copyright" target="_blank">contributors</a>'
+            url={`https://maps.geoapify.com/v1/tile/${MAP_STYLE}/{z}/{x}/{y}.png?apiKey=${API_KEY}`}
+            maxZoom={20}
           />
 
             {isLoadingPins && (
