@@ -47,6 +47,7 @@ function Home({ user }) {
   const [isLoadingAction, setIsLoadingAction] = useState(false);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [hasAdminAccess, setHasAdminAccess] = useState(false);
 
   // Retrieve pin list from server
   const [mapLocations, setMapLocations] = useState([]);
@@ -211,6 +212,34 @@ function Home({ user }) {
     handleGetUserLocation();
   }, []);
 
+  // Check admin access by trying to access admin endpoint
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      if (!user) {
+        setHasAdminAccess(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('https://rv-n5oa.onrender.com/v1/pin/admin/list', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        // If response is successful (not 404 or 403), user has admin access
+        if (response.ok) {
+          setHasAdminAccess(true);
+        } else {
+          setHasAdminAccess(false);
+        }
+      } catch (error) {
+        console.error('Admin access check failed:', error);
+        setHasAdminAccess(false);
+      }
+    };
+
+    checkAdminAccess();
+  }, [user]);
   // Get route data in GeoJSON
   const [routeData, setRouteData] = useState(null);
   
@@ -280,10 +309,12 @@ function Home({ user }) {
                       Minigame
                     </button>
 
-                    {/* Button to Admin Page, currently available for everyone including users */}
-                    <button className="dropdown-item" onClick={() => navigate('/admin')}>
-                      Admin Controls
-                    </button>
+                    {/* Admin Controls - only visible if user has admin access */}
+                    {hasAdminAccess && (
+                      <button className="dropdown-item" onClick={() => navigate('/admin')}>
+                        Admin Controls
+                      </button>
+                    )}
                   </div>
                 )}
               
