@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef, useActionState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap, GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Logo from "../../assets/BinFinderLogo.png";
 import './Home.css';
 
-// Temporary data (pending removal)
-// import { mapLocations } from './tempdata.js';
+// API Key for routing services
+const API_KEY = import.meta.env.VITE_GEOAPIFY_KEY;
+const MAP_STYLE = "klokantech-basic"
 
 // Create bin icon for pin
 const getIconStyle = (type) => {
@@ -85,7 +86,6 @@ function Home({ user }) {
 
     fetchPins();
   }, []);
-
 
   // For category filter
   const categories = ['Recycling Bin', 'Recycling Centre', 'Donation Bin', 'Donation Centre'];
@@ -199,7 +199,7 @@ function Home({ user }) {
     useEffect(() => {
       if (userLocation) {
         map.flyTo([userLocation.lat, userLocation.lng], 14.5, {
-          duration: 2 
+          duration: 1
         });
       }
     }, [userLocation, map]);
@@ -210,6 +210,44 @@ function Home({ user }) {
   useEffect(() => {
     handleGetUserLocation();
   }, []);
+
+  // Get route data in GeoJSON
+  const [routeData, setRouteData] = useState(null);
+  
+  const handleNavigate = (destLat, destLng) => {
+    // Check if browser supports Geolocation
+    if (!navigator.geolocation) {
+      console.error("Geolocation is not supported by your browser");
+      return;
+    }
+
+    // Get User's Current Position
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const startLat = position.coords.latitude;
+        const startLng = position.coords.longitude;
+
+        // Prepare API call
+        const startPoint = `${startLat},${startLng}`;
+        const endPoint = `${destLat},${destLng}`;
+        
+        const url = `https://api.geoapify.com/v1/routing?waypoints=${startPoint}|${endPoint}&mode=drive&apiKey=${API_KEY}`;
+
+        // Fetch the route
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            // Update state
+            setRouteData(data);
+          })
+          .catch((error) => console.error("Error fetching route:", error));
+      },
+      (error) => {
+        console.error("Error getting user location:", error);
+        alert("Please enable location services to navigate.");
+      }
+    );
+};
 
   return (
     <div className="home-container">
@@ -284,8 +322,9 @@ function Home({ user }) {
           className="leaflet-container"
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | © OpenStreetMap <a href="https://www.openstreetmap.org/copyright" target="_blank">contributors</a>'
+            url={`https://maps.geoapify.com/v1/tile/${MAP_STYLE}/{z}/{x}/{y}.png?apiKey=${API_KEY}`}
+            maxZoom={20}
           />
 
             {isLoadingPins && (
@@ -362,6 +401,15 @@ function Home({ user }) {
               </Popup>
             </Marker>
           ))}
+
+          {/* Draw route */}
+          {routeData && (
+            <GeoJSON 
+              key={JSON.stringify(routeData)} 
+              data={routeData} 
+              style={{ color: "blue", weight: 5, opacity: 0.8 }} 
+            />
+          )}
         </MapContainer>
 
         <div className="sidebar">
