@@ -82,8 +82,8 @@ function Admin({ user, setUser }) {
       const data = await response.json();
 
       return {
-        pendingAdditions: data.add_pins || [],
-        pendingDeletions: data.del_pins || [],
+        pendingAdditions: data.pendingPinForAddition || [],
+        pendingDeletions: data.pendingPinForDeletion || [],
         allPins: data.pins || []
       };
 
@@ -183,7 +183,7 @@ function Admin({ user, setUser }) {
 
     setIsLoadingAction(true);
     try {
-      const response = await fetch(`${BASE_URL}/v1/pin/center/action/${pinId}/a`, {
+      const response = await fetch(`${BASE_URL}/v1/pin/center/a/${pinId}`, {
         method: 'PUT',
         credentials: 'include'
       });
@@ -210,7 +210,7 @@ function Admin({ user, setUser }) {
 
     setIsLoadingAction(true);
     try {
-      const response = await fetch(`${BASE_URL}/v1/pin/center/action/${pinId}/r`, {
+      const response = await fetch(`${BASE_URL}/v1/pin/center/r/${pinId}`, {
         method: 'PUT',
         credentials: 'include'
       });
@@ -237,8 +237,8 @@ function Admin({ user, setUser }) {
 
     setIsLoadingAction(true);
     try {
-      const response = await fetch(`${BASE_URL}/v1/pin/delete/${pinId}`, {
-        method: 'DELETE',
+      const response = await fetch(`${BASE_URL}/v1/pin/center/drp/${pinId}`, {
+        method: 'PUT',
         credentials: 'include'
       });
 
@@ -264,8 +264,7 @@ function Admin({ user, setUser }) {
 
     setIsLoadingAction(true);
     try {
-      // Reject deletion by activating the pin again
-      const response = await fetch(`${BASE_URL}/v1/pin/center/action/${pinId}/a`, {
+      const response = await fetch(`${BASE_URL}/v1/pin/center/rrp/${pinId}`, {
         method: 'PUT',
         credentials: 'include'
       });
@@ -304,6 +303,7 @@ function Admin({ user, setUser }) {
   const loadPins = async () => {
     try {
       const data = await fetchAllPins();
+      
       setPins(data.allPins || []);
       setPendingAddPins(data.pendingAdditions || []);
       setPendingDelPins(data.pendingDeletions || []);
@@ -603,14 +603,14 @@ function Admin({ user, setUser }) {
                             className="action-btn approve-btn"
                             disabled={isLoadingAction}
                           >
-                            Approve (a)
+                            Approve
                           </button>
                           <button
                             onClick={() => handleRejectAddition(pin.id || pin._id)}
                             className="action-btn reject-btn"
                             disabled={isLoadingAction}
                           >
-                            Reject (r)
+                            Reject
                           </button>
                         </td>
                       </tr>

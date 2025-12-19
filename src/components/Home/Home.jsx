@@ -243,6 +243,32 @@ function Home({ user }) {
     return null;
   }
 
+  // Handle report issue for a pin
+  const handleReportIssue = async (pinId, pinName) => {
+    if (!window.confirm(`Report an issue with "${pinName}"?\n\nThis will notify administrators to review this location.`)) {
+      return;
+    }
+
+    setIsLoadingAction(true);
+    try {
+      const response = await fetch(`https://rv-n5oa.onrender.com/v1/pin/report/${pinId}`, {
+        method: 'PUT',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      alert('Issue reported successfully! Admins will review this location.');
+    } catch (error) {
+      console.error('Failed to report issue:', error);
+      alert('Failed to report issue. Please try again.');
+    } finally {
+      setIsLoadingAction(false);
+    }
+  };
+
   useEffect(() => {
     handleGetUserLocation();
   }, []);
@@ -458,7 +484,11 @@ function Home({ user }) {
                   </button>
                   {user && (
                     <>
-                      <button className="report-btn">
+                      <button 
+                        className="report-btn"
+                        onClick={() => handleReportIssue(location.id, location.name)}
+                        disabled={isLoadingAction}
+                      >
                         Report Issue
                       </button>
                     </>
