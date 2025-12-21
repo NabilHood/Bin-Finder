@@ -7,6 +7,7 @@ import Home from './components/Home/Home';
 import FarmingSimulator from './components/Game/FarmingSimulator'; // Import the new game component
 import Admin from './components/Admin/Admin';
 import Profile from './components/Profile/Profile';
+import Leaderboard from './components/Leaderboard/Leaderboard';
 import './App.css';
 
 function App() {
@@ -107,6 +108,10 @@ function App() {
           <Route 
             path="/profile" 
             element={user ? <Profile user={user} /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/leaderboard" 
+            element={<Leaderboard user={user} />} 
           />
           {/* Add a catch-all route for undefined paths */}
           <Route 

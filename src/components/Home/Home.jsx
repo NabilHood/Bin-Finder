@@ -366,6 +366,9 @@ function Home({ user }) {
                     <button className="dropdown-item" onClick={() => navigate('/profile')}>
                       Profile
                     </button>
+                    <button className="dropdown-item" onClick={() => navigate('/leaderboard')}>
+                      Leaderboard
+                    </button>
                     <button className="dropdown-item" onClick={() => navigate('/farm')}>
                       Minigame
                     </button>

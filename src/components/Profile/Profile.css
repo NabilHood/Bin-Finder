@@ -70,6 +70,58 @@
   font-weight: bold;
 }
 
+/* User menu dropdown */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: #fafafa;
+  color: #2E8B57;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-btn:hover {
+  background: #e7e7e7;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 60px;
+  width: 200px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px 0px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  border: none;
+  background: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #afafaf;
+}
+
 .profile-content {
   max-width: 1200px;
   margin: 0 auto;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Logo from '../../assets/BinFinderLogo.png';
 import './Profile.css';
 
@@ -8,6 +9,7 @@ const Profile = ({ user }) => {
   const [profileData, setProfileData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const BASE_URL = 'https://rv-n5oa.onrender.com';
 
   useEffect(() => {
@@ -74,12 +76,31 @@ const Profile = ({ user }) => {
         </div>
         <div className="menu-right">
           <div className="user-menu">
-            <button
-              className="nav-login-btn"
-              onClick={() => navigate('/')}
-            >
-              Main Page
-            </button>
+            <div className="dropdown-wrapper">
+              <button
+                className="dropdown-btn"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                Menu <span>{dropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+              </button>
+            </div>
+
+            {dropdownOpen && (
+              <div className="dropdown-panel">
+                <button className="dropdown-item" onClick={() => navigate('/')}>
+                  Home
+                </button>
+                <button className="dropdown-item" onClick={() => navigate('/leaderboard')}>
+                  Leaderboard
+                </button>
+                <button className="dropdown-item" onClick={() => navigate('/farm')}>
+                  Minigame
+                </button>
+                <button className="dropdown-item" onClick={() => navigate('/admin')}>
+                  Admin Controls
+                </button>
+              </div>
+            )}
             
             <span className="welcome-text">Welcome, {user.fullName}!</span>
             <span className="user-points">{user.points} pts</span>

@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Logo from '../../assets/BinFinderLogo.png';
+import './FarmingSimulator.css';
 
 // Define Constants and Configurations outside the component
 const GRID_SIZE = 8;
@@ -25,7 +29,8 @@ const initializeFarm = () => {
     return farm;
 };
 
-const FarmingSimulator = () => {
+const FarmingSimulator = ({ user }) => {
+    const navigate = useNavigate();
     // State Hooks for managing game data
     const [day, setDay] = useState(1);
     const [money, setMoney] = useState(50);
@@ -33,6 +38,7 @@ const FarmingSimulator = () => {
     const [inventory, setInventory] = useState({ CarrotSeed: 0, WheatSeed: 0 });
     // Farm state is a 2D array, which can be complex to manage immutably in React state
     const [farm, setFarm] = useState(initializeFarm()); 
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const canvasRef = useRef(null);
 
@@ -172,6 +178,11 @@ const FarmingSimulator = () => {
 
     // --- Rendering JSX ---
 
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
     // CSS styles embedded as an object for a simple component file
     const styles = {
         container: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
@@ -193,7 +204,57 @@ const FarmingSimulator = () => {
     };
 
     return (
-        <div style={styles.container}>
+        <div className="game-page">
+            {/* Navigation Bar */}
+            <nav className="navbar">
+                <div className="logo-title">
+                    <img src={Logo} height={50} alt="Logo" />
+                    <div className="nav-title">BinFinder</div>
+                </div>
+                <div className="menu-right">
+                    {user ? (
+                        <div className="user-menu">
+                            <div className="dropdown-wrapper">
+                                <button
+                                    className="dropdown-btn"
+                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                >
+                                    Menu <span>{dropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+                                </button>
+                            </div>
+
+                            {dropdownOpen && (
+                                <div className="dropdown-panel">
+                                    <button className="dropdown-item" onClick={() => navigate('/')}>
+                                        Home
+                                    </button>
+                                    <button className="dropdown-item" onClick={() => navigate('/profile')}>
+                                        Profile
+                                    </button>
+                                    <button className="dropdown-item" onClick={() => navigate('/leaderboard')}>
+                                        Leaderboard
+                                    </button>
+                                    <button className="dropdown-item" onClick={() => navigate('/admin')}>
+                                        Admin Controls
+                                    </button>
+                                </div>
+                            )}
+                            
+                            <span className="welcome-text">Welcome, {user.fullName}!</span>
+                            <span className="user-points">{user.points} pts</span>
+                            <button className="nav-login-btn" onClick={handleLogout}>
+                                Log Out
+                            </button>
+                        </div>
+                    ) : (
+                        <button className="nav-login-btn" onClick={() => navigate('/login')}>
+                            Log In
+                        </button>
+                    )}
+                </div>
+            </nav>
+
+            <div style={styles.container}>
             <h1>Pixel Farming Simulator</h1>
 
             <div style={styles.uiPanel}>
@@ -247,6 +308,7 @@ const FarmingSimulator = () => {
                 style={styles.canvas}
                 onClick={handleCanvasClick}
             />
+            </div>
         </div>
     );
 };

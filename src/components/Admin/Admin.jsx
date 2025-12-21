@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Logo from "../../assets/BinFinderLogo.png";
 import './Admin.css';
 
@@ -24,6 +25,7 @@ function Admin({ user, setUser }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoadingAction, setIsLoadingAction] = useState(false);
   const [activeTab, setActiveTab] = useState('users');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   // Search functionality for users
   useEffect(() => {
@@ -342,17 +344,36 @@ function Admin({ user, setUser }) {
       <nav className="navbar">
         <div className="logo-title">
           <img src={Logo} height={50} alt="Logo" />
-          <div className="nav-title">BinFinder Admin</div>
+          <div className="nav-title">BinFinder</div>
         </div>
         <div className="menu-right">
           {user ? (
             <div className="user-menu">
-              <button
-                className="nav-login-btn"
-                onClick={() => navigate('/')}
-              >
-                Main Page
-              </button>
+              <div className="dropdown-wrapper">
+                <button
+                  className="dropdown-btn"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  Menu <span>{dropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+                </button>
+              </div>
+
+              {dropdownOpen && (
+                <div className="dropdown-panel">
+                  <button className="dropdown-item" onClick={() => navigate('/')}>
+                    Home
+                  </button>
+                  <button className="dropdown-item" onClick={() => navigate('/profile')}>
+                    Profile
+                  </button>
+                  <button className="dropdown-item" onClick={() => navigate('/leaderboard')}>
+                    Leaderboard
+                  </button>
+                  <button className="dropdown-item" onClick={() => navigate('/farm')}>
+                    Minigame
+                  </button>
+                </div>
+              )}
 
               <span className="welcome-text">Welcome, {user.fullName}!</span>
               <span className="user-points">{user.points} pts</span>

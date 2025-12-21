@@ -1,0 +1,448 @@
+.leaderboard-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 50%, #81c784 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.leaderboard-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+  clip-path: ellipse(150% 100% at 50% 0%);
+  z-index: 0;
+}
+
+.leaderboard-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 250px;
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  clip-path: ellipse(150% 100% at 50% 100%);
+  z-index: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #2E8B57;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fafafa;
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-btn {
+  padding: 10px 20px;
+  background: #fafafa;
+  border: none;
+  color: #2E8B57;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover {
+  background: #e7e7e7;
+}
+
+.welcome-text {
+  font-weight: 500;
+  color: #fafafa;
+}
+
+.user-points {
+  background: #fafafa;
+  color: #2E8B57;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.nav-login-btn {
+  padding: 10px 20px;
+  background: #fafafa;
+  color: #2E8B57;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-login-btn:hover {
+  background: #e7e7e7;
+}
+
+/* User menu dropdown */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: #fafafa;
+  color: #2E8B57;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-btn:hover {
+  background: #e7e7e7;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 60px;
+  width: 200px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px 0px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  border: none;
+  background: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #afafaf;
+}
+
+.leaderboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.leaderboard-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.leaderboard-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Podium */
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: nowrap;
+}
+
+.podium-place {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.podium-place:hover {
+  transform: translateY(-10px);
+}
+
+.podium-place.first {
+  width: 220px;
+  min-height: 300px;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  order: 2;
+}
+
+.podium-place.second {
+  width: 200px;
+  min-height: 260px;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  order: 1;
+}
+
+.podium-place.third {
+  width: 200px;
+  min-height: 240px;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  order: 3;
+}
+
+.podium-crown {
+  font-size: 2rem;
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.podium-medal {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.podium-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #11998e;
+  margin: 1rem auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.podium-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.podium-points {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #11998e;
+  margin-top: auto;
+}
+
+/* Leaderboard Table */
+.leaderboard-table-container {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table thead {
+  background: #11998e;
+  color: white;
+}
+
+.leaderboard-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.leaderboard-table tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.3s;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.leaderboard-table tbody tr.current-user {
+  background: #e8ecff;
+  font-weight: bold;
+}
+
+.leaderboard-table td {
+  padding: 1rem;
+}
+
+.rank-cell {
+  width: 80px;
+  text-align: center;
+}
+
+.rank {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.you-badge {
+  background: #11998e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.points-cell {
+  text-align: center;
+}
+
+.points {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.stat-cell {
+  text-align: center;
+  color: #666;
+  font-weight: 500;
+}
+
+.loading, .error, .no-data {
+  text-align: center;
+  padding: 3rem;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #ff6b6b;
+  background: white;
+  border-radius: 10px;
+  margin: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .podium {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .podium-place {
+    width: 100% !important;
+    max-width: 250px;
+    min-height: 200px !important;
+    order: 0 !important;
+  }
+
+  .podium-place.first {
+    max-width: 280px;
+  }
+
+  .leaderboard-table {
+    font-size: 0.85rem;
+  }
+
+  .user-cell {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rank {
+    font-size: 1.2rem;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .menu-right {
+    flex-wrap: wrap;
+  }
+}
