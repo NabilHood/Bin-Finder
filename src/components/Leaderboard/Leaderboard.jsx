@@ -10,7 +10,7 @@ const Leaderboard = ({ user }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const BASE_URL = 'https://rv-n5oa.onrender.com';
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchLeaderboard = async () => {

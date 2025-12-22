@@ -6,7 +6,7 @@ import './Admin.css';
 
 function Admin({ user, setUser }) {
   const navigate = useNavigate();
-  const BASE_URL = 'https://rv-n5oa.onrender.com';
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // User states
   const [users, setUsers] = useState([]);
