@@ -14,6 +14,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   // Check for existing user session on app load
   useEffect(() => {
     const checkExistingUser = async () => {
@@ -24,7 +26,7 @@ function App() {
           
           // Optional: Verify with backend that session is still valid
           try {
-            const response = await fetch('https://rv-n5oa.onrender.com/v1/user/profile', {
+            const response = await fetch(`${BASE_URL}/v1/user/profile`, {
               method: 'GET',
               credentials: 'include'
             });

@@ -11,6 +11,8 @@ import './Home.css';
 const API_KEY = import.meta.env.VITE_GEOAPIFY_KEY;
 const MAP_STYLE = "klokantech-basic"
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // Create bin icon for pin
 const getIconStyle = (type) => {
   switch (type) {
@@ -55,7 +57,7 @@ function Home({ user }) {
   useEffect(() => {
     const fetchPins = async () => {
       try {
-        const response = await fetch('https://rv-n5oa.onrender.com/v1/pin/list', {
+        const response = await fetch(`${BASE_URL}/v1/pin/list`, {
             method: 'GET',
             credentials: 'include'
           }
@@ -123,7 +125,7 @@ function Home({ user }) {
     setShowUserPinsPanel(true);
     setIsLoadingUserPins(true);
     try {
-      const response = await fetch('https://rv-n5oa.onrender.com/v1/user/profile', {
+      const response = await fetch(`${BASE_URL}/v1/user/profile`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -179,7 +181,7 @@ function Home({ user }) {
       };
       console.log(newPinData)
 
-      const response = await fetch('https://rv-n5oa.onrender.com/v1/pin/create', {
+      const response = await fetch(`${BASE_URL}/v1/pin/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -251,7 +253,7 @@ function Home({ user }) {
 
     setIsLoadingAction(true);
     try {
-      const response = await fetch(`https://rv-n5oa.onrender.com/v1/pin/report/${pinId}`, {
+      const response = await fetch(`${BASE_URL}/v1/pin/report/${pinId}`, {
         method: 'PUT',
         credentials: 'include'
       });
@@ -282,7 +284,7 @@ function Home({ user }) {
       }
 
       try {
-        const response = await fetch('https://rv-n5oa.onrender.com/v1/pin/admin/list', {
+        const response = await fetch(`${BASE_URL}/v1/pin/admin/list`, {
           method: 'GET',
           credentials: 'include'
         });
