@@ -24,9 +24,15 @@ const Leaderboard = ({ user }) => {
           throw new Error('Failed to fetch leaderboard data');
         }
 
-        const data = await response.json();
-        console.log('Leaderboard data:', data);
-        setLeaderboardData(data.leaderboard || []);
+      const data = await response.json();
+      console.log('Leaderboard data:', data);
+
+      // Sort by points
+      const sortedLeaderboard = (data.leaderboard || []).sort(
+        (a, b) => b.point - a.point
+      );
+
+      setLeaderboardData(sortedLeaderboard);
         setError(null);
       } catch (err) {
         console.error('Error fetching leaderboard:', err);
