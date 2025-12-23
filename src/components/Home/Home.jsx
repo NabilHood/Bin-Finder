@@ -29,6 +29,50 @@ const getIconStyle = (type) => {
   }
 };
 
+// Use Hardcoded Pins if Server is not up
+const HARDCODED_PINS = [
+  {
+    id: '1',
+    lat: 2.909353,
+    lng: 101.656647,
+    name: 'Kloth Cares Bin',
+    type: 'Donation Bin',
+    address: 'Cyberjaya, 63000 Cyberjaya, Selangor'
+  },
+  {
+    id: '2',
+    lat: 2.912359, 
+    lng: 101.655425,
+    name: 'Cyberjaya Recycling Centre KDEBWM',
+    type: 'Recycling Centre',
+    address: 'Persiaran Rimba Permai, Cyberjaya, 63000 Cyberjaya, Selangor'
+  },
+  {
+    id: '3',
+    lat: 2.921116,
+    lng: 101.657028, 
+    name: 'Clothes Recycle Bin',
+    type: 'Recycling Bin',
+    address: 'Jalan Teknokrat 5, Cyber 5, 63000 Cyberjaya, Selangor'
+  },
+  {
+    id: '4',
+    lat: 2.913588,
+    lng: 101.655210,
+    name: 'ERTH: Electronic Recycling Through Heroes (E-waste)',
+    type: 'Recycling Centre',
+    address: 'Ground Floor, G-3A, Kanvas Retail @ Prima 15, Jalan Teknokrat 6, Cyberjaya, 63000 Cyberjaya, Selangor'
+  },
+  {
+    id: '5',
+    lat: 2.921307,
+    lng: 101.656932,
+    name: 'Prima Avenue Sports and Recreational Centre, Donation Bin',
+    type: 'Donation Bin',
+    address: 'Jalan Teknokrat 5, Cyber 5, 63000 Cyberjaya, Selangor'
+  }
+]
+
 const createPin = (type) => {
   const { color, icon } = getIconStyle(type);
 
@@ -80,15 +124,20 @@ function Home({ user }) {
 
         setMapLocations(formattedPins);
       } catch (error) {
-        console.error('Failed to fetch pins:', error);
-        alert('Failed to load map locations.');
+        console.error('Failed to fetch pins, using fallback data:', error);
+
+        // Use hardcoded pins if server fails
+        setMapLocations(HARDCODED_PINS);
+
+        alert('Server unavailable.');
       } finally {
         setIsLoadingPins(false);
       }
     };
 
     fetchPins();
-  }, []);
+    }, []);
+
 
   // For category filter
   const categories = ['Recycling Bin', 'Recycling Centre', 'Donation Bin', 'Donation Centre'];
