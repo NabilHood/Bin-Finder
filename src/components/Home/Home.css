@@ -510,3 +510,22 @@
   background: #d4edda;
   color: #155724;
 }
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .leaflet-container {
+    width: 100%;
+    height: 60vh;
+    margin-bottom: 15px;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+}
